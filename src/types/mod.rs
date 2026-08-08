@@ -41,3 +41,17 @@ pub use resources::{
     ConnectionRevoked, File, FileDeleted, FileList, PoolInfo, PoolListItem, PoolSpecResponse,
     PoolStatusInfo,
 };
+
+/// Deserialize a field that the server may send as an explicit `null`.
+///
+/// `#[serde(default)]` only covers a *missing* key. SIE sends `null` for fields it has no
+/// value for, which without this would be a hard decode failure rather than a default.
+pub(crate) fn null_as_default<'de, D, T>(deserializer: D) -> Result<T, D::Error>
+where
+    D: serde::Deserializer<'de>,
+    T: serde::Deserialize<'de> + Default,
+{
+    use serde::Deserialize as _;
+
+    Ok(Option::<T>::deserialize(deserializer)?.unwrap_or_default())
+}

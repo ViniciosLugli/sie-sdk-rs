@@ -117,6 +117,21 @@ let result = client.call(|sie| sie.encode("BAAI/bge-m3", [Item::text("Hello")]).
 # }
 ```
 
+## Testing
+
+`cargo test` runs unit tests plus an HTTP suite against a mock server. There is also a
+suite that runs against a real deployment, ignored by default:
+
+```bash
+docker run -d -p 8080:8080 -v sie-hf-cache:/app/.cache/huggingface \
+  ghcr.io/superlinked/sie-server:latest-cpu-default
+
+SIE_BASE_URL=http://localhost:8080 cargo test --test live -- --ignored --test-threads=1
+```
+
+It discovers models from the server's own catalogue by capability, so it adapts to whatever
+bundle a deployment serves; anything unavailable skips itself and says why.
+
 ## Relationship to the Python SDK
 
 Feature parity with `sie_sdk` on the client side, designed for Rust rather than

@@ -49,7 +49,11 @@ pub struct JobFieldMap {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub input_field: Option<String>,
     /// Source columns copied through to the sink unchanged.
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    #[serde(
+        default,
+        deserialize_with = "crate::types::null_as_default",
+        skip_serializing_if = "Vec::is_empty"
+    )]
     pub carry: Vec<String>,
     /// How to interpret `input_field`: `text` or `document`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -74,11 +78,11 @@ pub struct JobPreflight {
 /// One completed slice of a job's output.
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct JobChunk {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub seq: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub items: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub state: String,
     /// Where the chunk's msgpack payload is stored. Time-limited, and never the payload
     /// itself.
@@ -109,11 +113,11 @@ pub struct ConnectorJobValidation {
 /// What the connector pair can do, which decides how much of a re-run can be skipped.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ConnectorJobCapabilities {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub incremental_inference: bool,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub incremental_source_scan: bool,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub incremental_selection: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub source_scan: Option<String>,
@@ -138,11 +142,11 @@ pub struct ConnectorJobCapabilities {
 /// The shape a connector plan will write.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ConnectorPlanOutputShape {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub result_kind: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub output_field: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub output_types: Vec<String>,
     #[serde(default)]
     pub dimensions: Option<u32>,
@@ -151,11 +155,11 @@ pub struct ConnectorPlanOutputShape {
 /// A priced, executable description of the work a connector job would do.
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ConnectorJobPlan {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub revision: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub expires_at: f64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub executable: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub executor_available: Option<bool>,
@@ -164,35 +168,35 @@ pub struct ConnectorJobPlan {
     /// Why the plan cannot execute, when it cannot.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub blocking_code: Option<String>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub rows: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub mapped_bytes: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub input_bytes: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub eligible_count: u64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub eligible_count_quality: Option<String>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub eligible_input_byte_count: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub matched_checkpoint_count: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub skipped_unchanged_count: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub deleted_preserved_count: u64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub output_dimensions: Option<u32>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub output: ConnectorPlanOutputShape,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub cost_basis: Option<String>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub max_reservation_credits: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub validation: ConnectorJobValidation,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub capabilities: ConnectorJobCapabilities,
 }
 
@@ -201,78 +205,78 @@ pub struct ConnectorJobPlan {
 pub struct ConnectorJobCheckpoint {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub profile: Option<String>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub profile_version: u64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub expected_generation: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub generation: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub published_revision: u64,
 }
 
 /// Per-item tallies for one attempt.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ConnectorJobItemOutcomes {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub claimed: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub dispatched: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub inferred: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub staged: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub published: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub failed: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub reexecution_required: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub skipped_unchanged: u64,
 }
 
 /// What one publication committed to the sink.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Serialize, Deserialize)]
 pub struct ConnectorJobPublication {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub attempt_ordinal: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub revision: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub published: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub skipped_unchanged: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub deleted: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub failed: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub reexecuted: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub committed_at: f64,
 }
 
 /// The job currently holding a sink region another job wants.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ConnectorJobOverlapOwner {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub job_id: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub attempt_ordinal: u64,
 }
 
 /// One execution or repair pass over a plan.
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ConnectorJobAttempt {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub ordinal: u64,
     /// `execute` or `repair`.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub action: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub state: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub recovery_attempt_ordinal: Option<u64>,
@@ -280,17 +284,17 @@ pub struct ConnectorJobAttempt {
     pub outcome: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub replayed: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub billed_credits: Option<u64>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub overlap_owner: Option<ConnectorJobOverlapOwner>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub item_outcomes: ConnectorJobItemOutcomes,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub publication: Option<ConnectorJobPublication>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub created_at: f64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub finished_at: Option<f64>,
@@ -312,7 +316,7 @@ pub struct ConnectorJobRepairWindow {
 /// Whether the job needs a repair pass, and what is left of its window.
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ConnectorJobRecovery {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub required: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -320,9 +324,9 @@ pub struct ConnectorJobRecovery {
     pub outcome: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub reexecution_required: bool,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub repair: ConnectorJobRepairWindow,
 }
 
@@ -332,13 +336,17 @@ pub struct ConnectorJobRecovery {
 /// sink URIs are deliberately absent: they can carry credentials.
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct JobStatus {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub id: String,
-    #[serde(default, rename = "object")]
+    #[serde(
+        default,
+        deserialize_with = "crate::types::null_as_default",
+        rename = "object"
+    )]
     pub object_kind: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub operation: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub model: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub state: Option<JobState>,
@@ -372,7 +380,11 @@ pub struct JobStatus {
     pub checkpoint: Option<ConnectorJobCheckpoint>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub attempt: Option<ConnectorJobAttempt>,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    #[serde(
+        default,
+        deserialize_with = "crate::types::null_as_default",
+        skip_serializing_if = "Vec::is_empty"
+    )]
     pub attempts: Vec<ConnectorJobAttempt>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub publication: Option<ConnectorJobPublication>,

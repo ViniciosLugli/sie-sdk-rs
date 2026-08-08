@@ -22,37 +22,37 @@ pub struct AppliedRate {
 /// What the rate book priced this request as.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct RateIdentity {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub model: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub profile: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub operation: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub region: String,
 }
 
 /// The estimated cost of a request.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct CostEstimate {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub endpoint: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub identity: RateIdentity,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub estimated_credits: u64,
     /// Upper bound assumed for each priced unit.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub unit_ceilings: HashMap<String, u64>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub applied_rates: Vec<AppliedRate>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub rate_book_version: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub rate_book_sha256: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub rounding_rule: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub estimate_basis: String,
     /// Meaningful only for duration-priced identities; `null` otherwise.
     #[serde(default)]

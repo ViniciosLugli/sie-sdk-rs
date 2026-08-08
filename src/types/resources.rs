@@ -12,19 +12,23 @@ use serde_json::Value;
 /// An uploaded file.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct File {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub id: String,
-    #[serde(default, rename = "object")]
+    #[serde(
+        default,
+        deserialize_with = "crate::types::null_as_default",
+        rename = "object"
+    )]
     pub object_kind: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub bytes: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub created_at: i64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub filename: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub purpose: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub status: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub expires_at: Option<i64>,
@@ -33,60 +37,72 @@ pub struct File {
 /// One page of the file list.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct FileList {
-    #[serde(default, rename = "object")]
+    #[serde(
+        default,
+        deserialize_with = "crate::types::null_as_default",
+        rename = "object"
+    )]
     pub object_kind: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub data: Vec<File>,
     #[serde(default)]
     pub first_id: Option<String>,
     #[serde(default)]
     pub last_id: Option<String>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub has_more: bool,
 }
 
 /// Confirmation that a file was deleted.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct FileDeleted {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub id: String,
-    #[serde(default, rename = "object")]
+    #[serde(
+        default,
+        deserialize_with = "crate::types::null_as_default",
+        rename = "object"
+    )]
     pub object_kind: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub deleted: bool,
 }
 
 /// How many requests in a batch are in each state.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct BatchRequestCounts {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub total: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub completed: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub failed: u64,
 }
 
 /// An offline batch of requests.
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct Batch {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub id: String,
-    #[serde(default, rename = "object")]
+    #[serde(
+        default,
+        deserialize_with = "crate::types::null_as_default",
+        rename = "object"
+    )]
     pub object_kind: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub endpoint: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub input_file_id: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub completion_window: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub status: String,
     #[serde(default)]
     pub output_file_id: Option<String>,
     #[serde(default)]
     pub error_file_id: Option<String>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub created_at: i64,
     #[serde(default)]
     pub finished_at: Option<i64>,
@@ -100,7 +116,7 @@ pub struct Batch {
     pub expired_at: Option<i64>,
     #[serde(default)]
     pub cancelled_at: Option<i64>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub request_counts: BatchRequestCounts,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub errors: Option<Value>,
@@ -111,15 +127,19 @@ pub struct Batch {
 /// One page of the batch list.
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct BatchList {
-    #[serde(default, rename = "object")]
+    #[serde(
+        default,
+        deserialize_with = "crate::types::null_as_default",
+        rename = "object"
+    )]
     pub object_kind: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub data: Vec<Batch>,
     #[serde(default)]
     pub first_id: Option<String>,
     #[serde(default)]
     pub last_id: Option<String>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub has_more: bool,
 }
 
@@ -128,29 +148,33 @@ pub struct BatchList {
 /// The secret itself is never returned.
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct Connection {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub id: i64,
-    #[serde(default, rename = "type")]
+    #[serde(
+        default,
+        deserialize_with = "crate::types::null_as_default",
+        rename = "type"
+    )]
     pub kind: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub name: String,
     /// Bumped whenever the secret is rotated.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub authorization_generation: i64,
     #[serde(default)]
     pub source_schema: Option<String>,
     #[serde(default)]
     pub sink_schema: Option<String>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub created_at: f64,
 }
 
 /// A newly created connection, with the org it belongs to.
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct ConnectionCreated {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub org: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub account_id: i64,
     #[serde(flatten)]
     pub connection: Connection,
@@ -159,26 +183,26 @@ pub struct ConnectionCreated {
 /// Confirmation that a connection was revoked.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ConnectionRevoked {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub org: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub account_id: i64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub name: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub state: String,
 }
 
 /// A worker assigned to a pool.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct AssignedWorkerInfo {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub name: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub url: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub gpu: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub bundle: String,
 }
 
@@ -186,57 +210,57 @@ pub struct AssignedWorkerInfo {
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct PoolStatusInfo {
     /// `pending`, `active` or `expired`.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub state: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub assigned_workers: Vec<AssignedWorkerInfo>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub created_at: f64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub last_renewed: f64,
 }
 
 /// A pool's requested shape, as the server echoes it back.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PoolSpecResponse {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub name: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub queue_pool: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub gpus: HashMap<String, u32>,
     /// Ceiling on assigned workers per GPU type.
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub gpu_caps: HashMap<String, u32>,
     #[serde(default)]
     pub bundle: Option<String>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub minimum_worker_count: u32,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub pinned_models: Vec<String>,
 }
 
 /// A pool, with its spec and its status.
 #[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
 pub struct PoolInfo {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub name: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub spec: PoolSpecResponse,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub status: PoolStatusInfo,
 }
 
 /// A pool as it appears in a listing.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct PoolListItem {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub name: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub state: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub gpus: HashMap<String, u32>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub worker_count: u32,
 }
 

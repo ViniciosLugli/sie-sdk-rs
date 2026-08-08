@@ -45,13 +45,36 @@ impl Client {
         parse_json(&response, "model")
     }
 
-    /// The raw `/health` payload, from either a gateway or a worker.
+    /// Health, from either a gateway or a standalone worker.
+    ///
+    /// A gateway answers `/health` with the whole cluster's state. A worker running on its
+    /// own has no such view: it serves the Kubernetes-style `/healthz` probe, which is
+    /// plain text, so its reply is reported as a worker with that status and nothing else.
     pub async fn health(&self) -> Result<HealthResponse> {
         let request = self
             .request(Method::GET, "/health")?
             .header("accept", headers::JSON_CONTENT_TYPE);
+        match self.send_once(request, RetryPolicy::NONE).await {
+            Ok(response) => parse_json(&response, "health"),
+            Err(error) if error.status() == Some(404) => self.worker_health().await,
+            Err(error) => Err(error),
+        }
+    }
+
+    /// The liveness probe a standalone worker serves in place of `/health`.
+    async fn worker_health(&self) -> Result<HealthResponse> {
+        let request = self.request(Method::GET, "/healthz")?;
         let response = self.send_once(request, RetryPolicy::NONE).await?;
-        parse_json(&response, "health")
+        let status = response.text().trim().to_string();
+        Ok(HealthResponse {
+            status: if status.is_empty() {
+                "ok".to_string()
+            } else {
+                status
+            },
+            kind: "worker".to_string(),
+            ..HealthResponse::default()
+        })
     }
 
     /// Cluster capacity, optionally narrowed to one GPU type.

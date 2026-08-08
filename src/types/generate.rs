@@ -106,11 +106,11 @@ impl Grammar {
 /// Token counts for a native generation.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct GenerationUsage {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub prompt_tokens: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub completion_tokens: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub total_tokens: u64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub credits_charged: Option<u64>,
@@ -151,7 +151,7 @@ pub struct GenerateChunk {
     pub text_delta: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub logprobs: Option<Vec<Value>>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub done: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub finish_reason: Option<FinishReason>,
@@ -287,18 +287,18 @@ impl ChatMessage {
 /// Token counts for a chat completion.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ChatUsage {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub prompt_tokens: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub completion_tokens: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub total_tokens: u64,
 }
 
 /// One completion candidate.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ChatChoice {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub index: u32,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub message: Option<ChatMessage>,
@@ -311,17 +311,21 @@ pub struct ChatChoice {
 /// A completed chat completion.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ChatCompletion {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub id: String,
-    #[serde(default, rename = "object")]
+    #[serde(
+        default,
+        deserialize_with = "crate::types::null_as_default",
+        rename = "object"
+    )]
     pub object_kind: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub created: i64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub model: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub system_fingerprint: Option<String>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub choices: Vec<ChatChoice>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub usage: Option<ChatUsage>,
@@ -350,9 +354,9 @@ pub struct ChatDelta {
 /// One streamed choice.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ChatChunkChoice {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub index: u32,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub delta: ChatDelta,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub finish_reason: Option<ChatFinishReason>,
@@ -366,17 +370,21 @@ pub struct ChatChunkChoice {
 /// request asked for it through `stream_options`.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ChatCompletionChunk {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub id: String,
-    #[serde(default, rename = "object")]
+    #[serde(
+        default,
+        deserialize_with = "crate::types::null_as_default",
+        rename = "object"
+    )]
     pub object_kind: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub created: i64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub model: String,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub system_fingerprint: Option<String>,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub choices: Vec<ChatChunkChoice>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub usage: Option<ChatUsage>,
@@ -419,9 +427,9 @@ impl ResponseInputMessage {
 pub struct ResponseOutputText {
     #[serde(rename = "type", default)]
     pub kind: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub text: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub annotations: Vec<Value>,
 }
 
@@ -430,13 +438,13 @@ pub struct ResponseOutputText {
 pub struct ResponseOutputMessage {
     #[serde(rename = "type", default)]
     pub kind: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub id: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub role: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub status: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub content: Vec<ResponseOutputText>,
 }
 
@@ -445,28 +453,32 @@ pub struct ResponseOutputMessage {
 /// The key names differ from [`ChatUsage`]: this is the Responses API's own vocabulary.
 #[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ResponseUsage {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub input_tokens: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub output_tokens: u64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub total_tokens: u64,
 }
 
 /// A completed response.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ResponseResult {
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub id: String,
-    #[serde(default, rename = "object")]
+    #[serde(
+        default,
+        deserialize_with = "crate::types::null_as_default",
+        rename = "object"
+    )]
     pub object_kind: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub created_at: i64,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub model: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub status: String,
-    #[serde(default)]
+    #[serde(default, deserialize_with = "crate::types::null_as_default")]
     pub output: Vec<ResponseOutputMessage>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub usage: Option<ResponseUsage>,
