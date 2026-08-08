@@ -262,7 +262,7 @@ impl LeaseRenewer {
                 Ok(true) => return true,
                 Ok(false) => tracing::warn!("Lease renewal for pool '{}' was rejected", self.name),
                 Err(error) => {
-                    tracing::warn!("Lease renewal for pool '{}' failed: {error}", self.name)
+                    tracing::warn!("Lease renewal for pool '{}' failed: {error}", self.name);
                 }
             }
             // 1, 2, 4, 8, then 10 seconds.

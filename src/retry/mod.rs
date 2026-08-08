@@ -1,7 +1,7 @@
 //! The retry state machine shared by every endpoint.
 //!
 //! The Python SDK repeats a near-identical loop in each method, with small per-endpoint
-//! differences buried inside it. Here those differences are a [`RetryPolicy`] and the loop
+//! differences buried inside it. Here those differences are a policy struct and the loop
 //! exists once.
 
 pub mod backoff;
@@ -594,7 +594,7 @@ mod tests {
             .unwrap_err();
         match err {
             Error::LoraLoading { message, .. } => {
-                assert!(message.contains("after 10 retries"), "{message}")
+                assert!(message.contains("after 10 retries"), "{message}");
             }
             other => panic!("unexpected: {other:?}"),
         }
@@ -753,7 +753,7 @@ mod tests {
         let err = state.attempt_timeout(Duration::from_secs(30)).unwrap_err();
         match err {
             Error::Provisioning { message, .. } => {
-                assert!(message.contains("before request could be sent"))
+                assert!(message.contains("before request could be sent"));
             }
             other => panic!("unexpected: {other:?}"),
         }

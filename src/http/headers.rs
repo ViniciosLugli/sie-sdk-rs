@@ -141,6 +141,7 @@ impl Origin {
     }
 
     /// Whether a `ws`/`wss` URL is the WebSocket counterpart of this origin.
+    #[cfg(any(feature = "watch", test))]
     pub fn matches_websocket(&self, ws_url: &Url) -> bool {
         let scheme = match ws_url.scheme() {
             "wss" => "https",

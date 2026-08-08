@@ -59,7 +59,9 @@ pub(crate) struct Inner {
     defaults: RequestOptions,
     default_options: Option<Value>,
     edge_headers: Vec<(HeaderName, HeaderValue)>,
-    /// Kept alongside the reqwest defaults for transports that build their own requests.
+    /// Kept alongside the reqwest defaults for the WebSocket handshake, which builds its
+    /// own request rather than going through reqwest.
+    #[cfg(feature = "watch")]
     http_authorization: Option<HeaderValue>,
     concurrency: Option<Semaphore>,
     /// Background lease renewals, one per pool this client created.
@@ -187,16 +189,19 @@ impl Client {
     }
 
     /// The `Authorization` value this client sends, when it has one.
+    #[cfg(feature = "watch")]
     pub(crate) fn authorization_header(&self) -> Option<HeaderValue> {
         self.inner.http_authorization.clone()
     }
 
     /// The validated edge headers, for transports that cannot reuse the reqwest client.
+    #[cfg(feature = "watch")]
     pub(crate) fn edge_headers(&self) -> &[(HeaderName, HeaderValue)] {
         &self.inner.edge_headers
     }
 
     /// Whether a `ws`/`wss` URL is the WebSocket counterpart of the base origin.
+    #[cfg(feature = "watch")]
     pub(crate) fn websocket_matches_base_origin(&self, url: &Url) -> bool {
         !self.inner.edge_headers.is_empty()
             && self
@@ -537,14 +542,18 @@ impl ClientBuilder {
             HeaderName::from_static("x-sie-sdk-version"),
             HeaderValue::from_static(version::SDK_VERSION),
         );
+        #[cfg(feature = "watch")]
         let mut http_authorization = None;
         if let Some(api_key) = &self.api_key {
             let mut value = HeaderValue::from_str(&format!("Bearer {api_key}")).map_err(|_| {
                 Error::invalid("api_key contains characters that cannot be sent in a header")
             })?;
             value.set_sensitive(true);
-            default_headers.insert(reqwest::header::AUTHORIZATION, value.clone());
-            http_authorization = Some(value);
+            #[cfg(feature = "watch")]
+            {
+                http_authorization = Some(value.clone());
+            }
+            default_headers.insert(reqwest::header::AUTHORIZATION, value);
         }
 
         let mut http = reqwest::Client::builder()
@@ -575,6 +584,7 @@ impl ClientBuilder {
                 },
                 default_options: self.options,
                 edge_headers,
+                #[cfg(feature = "watch")]
                 http_authorization,
                 concurrency: self.max_concurrency.map(Semaphore::new),
                 leases: Mutex::new(HashMap::new()),
