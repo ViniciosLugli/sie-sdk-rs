@@ -10,6 +10,9 @@ signals handled for you.
 sie-sdk-rs = "0.1"
 ```
 
+The crate is `sie-sdk-rs`; the library it exposes is `sie_sdk`, so imports read
+`use sie_sdk::...`.
+
 ## Quick start
 
 ```rust,no_run
@@ -56,9 +59,7 @@ so it never replays a request that may already have reached a worker.
 
 Opt out per call when a failure is more useful than a wait:
 
-```rust,no_run
-# use sie_sdk::{Client, Item};
-# async fn example(client: Client) -> sie_sdk::Result<()> {
+```rust,ignore
 let result = client
     .encode("BAAI/bge-m3", [Item::text("Hello")])
     .wait_for_capacity(false)
@@ -71,8 +72,6 @@ if let Err(error) = &result
 {
     // Fall back to a smaller model, or shed the request.
 }
-# Ok(())
-# }
 ```
 
 Every call also reports what it cost and how hard it worked, through
@@ -80,10 +79,10 @@ Every call also reports what it cost and how hard it worked, through
 
 ## Streaming
 
-```rust,no_run
-# use futures_util::StreamExt;
-# use sie_sdk::{Client, types::ChatMessage};
-# async fn example(client: Client) -> sie_sdk::Result<()> {
+```rust,ignore
+use futures_util::StreamExt;
+use sie_sdk::types::ChatMessage;
+
 let mut stream = client.chat("qwen3", [ChatMessage::user("Write a haiku")]).stream()?;
 
 while let Some(chunk) = stream.next().await {
@@ -91,8 +90,6 @@ while let Some(chunk) = stream.next().await {
         print!("{delta}");
     }
 }
-# Ok(())
-# }
 ```
 
 ## Features
@@ -107,14 +104,11 @@ while let Some(chunk) = stream.next().await {
 
 The blocking client owns a runtime and runs the async one:
 
-```rust,no_run
+```rust,ignore
 use sie_sdk::{Item, blocking::Client};
 
-# fn main() -> sie_sdk::Result<()> {
 let client = Client::new("http://localhost:8080")?;
 let result = client.call(|sie| sie.encode("BAAI/bge-m3", [Item::text("Hello")]).send_one())?;
-# Ok(())
-# }
 ```
 
 ## Testing
