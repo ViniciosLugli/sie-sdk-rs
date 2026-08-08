@@ -19,7 +19,7 @@ name = "sie_sdk"
 [features]
 default = ["rustls-tls", "watch"]
 # TLS backend. Pick one.
-rustls-tls = ["reqwest/rustls", "reqwest/rustls-native-certs", "tokio-tungstenite?/rustls-tls-native-roots"]
+rustls-tls = ["reqwest/rustls", "tokio-tungstenite?/rustls-tls-native-roots"]
 native-tls = ["reqwest/native-tls", "tokio-tungstenite?/native-tls"]
 # Live cluster status over WebSocket.
 watch = ["dep:tokio-tungstenite"]
