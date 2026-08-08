@@ -1,0 +1,66 @@
+[package]
+name = "sie-sdk-rs"
+version = "0.1.0"
+edition = "2024"
+authors = ["Vinicios Lugli <vinicioslugli@gmail.com>"]
+license = "Apache-2.0"
+description = "Rust client for the SIE inference server: embeddings, reranking, extraction and text generation"
+repository = "https://github.com/ViniciosLugli/sie-sdk-rs"
+homepage = "https://github.com/ViniciosLugli/sie-sdk-rs"
+documentation = "https://docs.rs/sie-sdk-rs"
+readme = "README.md"
+keywords = ["sie", "embeddings", "inference", "client", "llm"]
+categories = ["api-bindings", "asynchronous"]
+exclude = ["/.github", "/target"]
+
+[lib]
+name = "sie_sdk"
+
+[features]
+default = ["rustls-tls", "watch"]
+# TLS backend. Pick one.
+rustls-tls = ["reqwest/rustls", "reqwest/rustls-native-certs", "tokio-tungstenite?/rustls-tls-native-roots"]
+native-tls = ["reqwest/native-tls", "tokio-tungstenite?/native-tls"]
+# Live cluster status over WebSocket.
+watch = ["dep:tokio-tungstenite"]
+# A blocking facade over the async client.
+blocking = ["tokio/rt-multi-thread"]
+# Conversions into `ndarray` types.
+ndarray = ["dep:ndarray"]
+
+[dependencies]
+async-stream = "0.3"
+base64 = "0.23"
+bytes = "1"
+futures-core = "0.3"
+futures-util = { version = "0.3", default-features = false, features = ["std"] }
+half = "2"
+hound = "3"
+http = "1"
+httpdate = "1"
+image = { version = "0.25", default-features = false, features = ["jpeg", "png", "gif", "webp", "bmp", "tiff"] }
+ndarray = { version = "0.17", optional = true }
+percent-encoding = "2"
+rand = "0.10"
+reqwest = { version = "0.13", default-features = false, features = ["json", "stream", "http2"] }
+rmp-serde = "1"
+rmpv = { version = "1", features = ["with-serde"] }
+serde = { version = "1", features = ["derive"] }
+serde_bytes = "0.11"
+serde_json = "1"
+thiserror = "2"
+tokio = { version = "1", features = ["rt", "sync", "time", "macros"] }
+tokio-tungstenite = { version = "0.30", optional = true, default-features = false, features = ["connect", "handshake"] }
+tracing = "0.1"
+url = "2"
+
+[dev-dependencies]
+approx = "0.5"
+futures-util = "0.3"
+rmp-serde = "1"
+rmpv = "1"
+tokio = { version = "1", features = ["full"] }
+wiremock = "0.6"
+
+[package.metadata.docs.rs]
+all-features = true

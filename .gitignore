@@ -1,0 +1,25 @@
+# Build artifacts
+/target/
+**/*.rs.bk
+
+# Cargo.lock is committed for binaries and left out for libraries, so that
+# downstream crates resolve their own dependency versions.
+Cargo.lock
+
+# Coverage and profiling output
+*.profraw
+*.profdata
+/coverage/
+/tarpaulin-report.*
+
+# Local environment and credentials used by the ignored integration tests
+.env
+.env.*
+!.env.example
+
+# Editor and OS noise
+.idea/
+.vscode/
+*.iml
+.DS_Store
+*.swp
